@@ -15,5 +15,5 @@
 [codeclimate-gpa-image]: https://codeclimate.com/github/better-js-logging/console-logger/badges/gpa.svg
 
 [codacy-url]: https://www.codacy.com/app/b-bottema/console-logger/dashboard
-[codacy-image]: https://www.codacy.com/project/badge/a9cc494aacf7473fadcf272d1318ffcd
-[codacy-shields-image]: https://img.shields.io/codacy/a9cc494aacf7473fadcf272d1318ffcd.svg?style=flat
+[codacy-image]: https://www.codacy.com/project/badge/fc9f04daa6cd4005bbe02683c3d0b558
+[codacy-shields-image]: https://img.shields.io/codacy/fc9f04daa6cd4005bbe02683c3d0b558.svg?style=flat
