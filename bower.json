@@ -13,7 +13,7 @@
     
   },
   "devDependencies": {
-    "better-logging-base": "*"
+    "better-logging-base": "1.0.0"
   },
   "keywords": [
     "console",
