@@ -1,71 +1,59 @@
 /* global require */
 var LoggingEnhancer = require('../bower_components/better-logging-base/dist/logging-enhancer.min').LoggingEnhancer;
 
-(function (logEnhancer, angular, sprintf, moment) {
-	'use strict';
+(function(logEnhancer, sprintf, moment) {
+    'use strict';
 
-	angular.module('logger', []).
-	provider('logEnhancer', function() {
-		var provider = this;
+    var datetimePattern = 'LLL'; // default datetime stamp pattern, overwrite in config phase
+    var datetimeLocale = window.navigator.userLanguage || window.navigator.language || 'en';
+    var prefixPattern = '%s::[%s]> '; // default prefix pattern, overwrite in config phase
 
-        this.datetimePattern = 'LLL'; 	// default datetime stamp pattern, overwrite in config phase
-        this.datetimeLocale = window.navigator.userLanguage || window.navigator.language || 'en';
-        this.prefixPattern = '%s::[%s]> '; 		    // default prefix pattern, overwrite in config phase
-        this.LEVEL = logEnhancer.LEVEL;             // with these configure loglevels in config fase
-        this.logLevels = {'*': this.LEVEL.TRACE}; 	// everything by everyone should be visible by default
+    var init = false;
 
-		this.$get = function() {
-			return {
+    console.getLogger = function(context) {
+        var logger = {
+            trace: logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.TRACE, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
+            debug: logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.DEBUG, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
+            log: logEnhancer.enhanceLogging(bind(console.log), logEnhancer.LEVEL.INFO, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
+            info: logEnhancer.enhanceLogging(bind(console.info), logEnhancer.LEVEL.INFO, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
+            warn: logEnhancer.enhanceLogging(bind(console.warn), logEnhancer.LEVEL.WARN, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
+            error: logEnhancer.enhanceLogging(bind(console.error), logEnhancer.LEVEL.ERROR, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern)
+        };
 
-                // Actually modifies $log. Without calling this in the run phase, $log remains untouched
-				enhanceAngularLog : function($log) {
-					$log.LEVEL = provider.LEVEL; // assign to $log, so the user can change them after config phase
-					$log.logLevels = provider.logLevels; // assign to $log, so the user can change them after config phase
+        // init has to come afterwards, else the console logging functions would have been replaced already and we'd get double timestamps
+        if (!init) {
+            doInit();
+        }
 
-					$log.getInstance = function(context) {
-						return {
-							trace	: logEnhancer.enhanceLogging($log.debug, $log.LEVEL.TRACE, context, $log, provider.datetimePattern, provider.datetimeLocale, provider.prefixPattern),
-							debug	: logEnhancer.enhanceLogging($log.debug, $log.LEVEL.DEBUG, context, $log, provider.datetimePattern, provider.datetimeLocale, provider.prefixPattern),
-							log		: logEnhancer.enhanceLogging($log.log,   $log.LEVEL.INFO,  context, $log, provider.datetimePattern, provider.datetimeLocale, provider.prefixPattern),
-							info	: logEnhancer.enhanceLogging($log.info,  $log.LEVEL.INFO,  context, $log, provider.datetimePattern, provider.datetimeLocale, provider.prefixPattern),
-							warn	: logEnhancer.enhanceLogging($log.warn,  $log.LEVEL.WARN,  context, $log, provider.datetimePattern, provider.datetimeLocale, provider.prefixPattern),
-							error	: logEnhancer.enhanceLogging($log.error, $log.LEVEL.ERROR, context, $log, provider.datetimePattern, provider.datetimeLocale, provider.prefixPattern)
-						};
-					};
-				}
-			};
-		};
-	}).
-	
-	/*
-		Default config and example config as well.
-		Overrides default logging pattern and global logLevel
-	*/
-    config(['logEnhancerProvider', function (logEnhancerProvider) {
-        logEnhancerProvider.datetimePattern = 'LLL';
-        logEnhancerProvider.datetimeLocale = window.navigator.userLanguage || window.navigator.language || 'en';
-        logEnhancerProvider.prefixPattern = '%s::[%s]> ';
-        logEnhancerProvider.logLevels = {'*': logEnhancerProvider.LEVEL.TRACE};
-        /*
-            // example structure:
-            logEnhancerProvider.logLevels = {
-                'a.b.c': logEnhancerProvider.LEVEL.TRACE, // trace + debug + info + warn + error
-                'a.b.d': logEnhancerProvider.LEVEL.ERROR, // error
-                'a.b': logEnhancerProvider.LEVEL.DEBUG, // debug + info + warn + error
-                'a': logEnhancerProvider.LEVEL.WARN, // warn + error
-                '*': logEnhancerProvider.LEVEL.INFO // info + warn + error
-            };
-        */
-    }]).
-	
-    run(['$log', 'logEnhancer', function ($log, logEnhancer) {
+        return logger;
+    };
+
+    function doInit() {
         if (!sprintf) {
-            $log.warn('sprintf.js not found: https://github.com/alexei/sprintf.js, using fixed layout pattern "%s::[%s]> "');
+            console.warn('[console-logger] sprintf.js not found: https://github.com/alexei/sprintf.js, using fixed layout pattern "%s::[%s]> "');
         }
         if (!moment) {
-            $log.warn('moment.js not found: http://momentjs.com, using non-localized simple Date format');
+            console.warn('[console-logger] moment.js not found: http://momentjs.com, using non-localized simple Date format');
         }
-        logEnhancer.enhanceAngularLog($log);
-		$log.info('logging enhancer initiated');
-    }]);
-}(new LoggingEnhancer(window.sprintf, window.moment), window.angular, window.sprintf, window.moment));
+
+        // override global logging functions to add at least a timestamp
+        console.trace = logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.TRACE, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+        console.debug = logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.DEBUG, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+        console.log = logEnhancer.enhanceLogging(bind(console.log), logEnhancer.LEVEL.INFO, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+        console.info = logEnhancer.enhanceLogging(bind(console.info), logEnhancer.LEVEL.INFO, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+        console.warn = logEnhancer.enhanceLogging(bind(console.warn), logEnhancer.LEVEL.WARN, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+        console.error = logEnhancer.enhanceLogging(bind(console.error), logEnhancer.LEVEL.ERROR, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+
+        init = true;
+
+        var logger = logEnhancer.enhanceLogging(bind(console.info), logEnhancer.LEVEL.INFO, 'console-logger', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+        logger('logging enhancer initiated');
+    }
+
+    function bind(func) {
+        return function() {
+            func.apply(console, arguments);
+        };
+    }
+
+}(new LoggingEnhancer(window.sprintf, window.moment), window.sprintf, window.moment));
