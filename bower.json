@@ -1,24 +1,22 @@
 {
-  "name": "better-logging-angular",
+  "name": "console-logger",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pdorgambide/angular-logger.git"
+    "url": "https://github.com/better-js-logging/console-logger.git"
   },
   "authors": [
     "Benny Bottema (http://blog.projectnibble.org/)"
   ],
-  "main": "./dist/better-logging-angular.min.js",
+  "main": "./dist/console-logger.min.js",
   "dependencies": {
-    "angular": "*"
+    
   },
   "devDependencies": {
-    "angular": "1.4.0",
-    "better-logging-base": "*",
-    "angular-mocks": "1.4.0"
+    "better-logging-base": "*"
   },
   "keywords": [
-    "angular",
+    "console",
     "logger",
     "logging"
   ],
@@ -28,10 +26,15 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "spec",
+    "debug",
+    "tmp",
+    "src",
+    "reports"
   ],
-  "homepage": "https://github.com/better-js-logging/better-logging-angular",
-  "description": "Enhance $log for better logging, including patterns and level management",
+  "homepage": "https://github.com/better-js-logging/console-logger",
+  "description": "Enhance console for better logging, including patterns and level management",
   "moduleType": [
     "globals"
   ]

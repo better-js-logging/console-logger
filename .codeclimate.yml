@@ -4,4 +4,4 @@ languages:
   PHP: false
   Python: false
 exclude_paths:
-- "dist/angular-logger.js"
+- "dist/console-logger.js"

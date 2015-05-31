@@ -1,20 +1,19 @@
 {
-  "name": "angular-logger",
+  "name": "console-logger",
   "version": "1.0.0",
-  "description": "> Enhance $log for better logging, including patterns and level management",
-  "main": "index.js",
+  "description": "> Enhance console for better logging, including patterns and level management",
+  "main": "console-logger.min.js",
   "scripts": {
     "test": "gulp test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/better-js-logging/better-logging-angular"
+    "url": "https://github.com/better-js-logging/console-logger"
   },
   "keywords": [
-    "angular",
+    "console",
     "logger",
-    "angular-logger",
-    "$log"
+    "logging"
   ],
   "author": {
     "name": "Benny Bottema",
@@ -27,9 +26,9 @@
   }],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/better-js-logging/better-logging-angular/issues"
+    "url": "https://github.com/better-js-logging/console-logger/issues"
   },
-  "homepage": "https://github.com/better-js-logging/better-logging-angular",
+  "homepage": "https://github.com/better-js-logging/console-logger",
   "devDependencies": {
     "del": "^1.2.0",
     "lazypipe": "~0.2.3",
@@ -48,9 +47,5 @@
     "gulp-coveralls": "~0.1.4",
     "gulp-size": "1.2.1",
     "gulp-util": "3.0.5"
-  },
-  "forLater": {
-    "gulp-jasmine-browser": "0.1.2",
-    "phantomjs": "1.9.17"
   }
 }

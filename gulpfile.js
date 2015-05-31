@@ -21,14 +21,14 @@ gulp.task('clean', function() {
 });
 
 gulp.task('browserify', function() {
-    return browserify({entries: ['./src/angular-logger.js']}).bundle()
-        .pipe(source('angular-logger-browserified.js'))
+    return browserify({entries: ['./src/console-logger.js']}).bundle()
+        .pipe(source('console-logger-browserified.js'))
         .pipe(buffer())
         .pipe(gulp.dest('./debug/'));
 });
 
 gulp.task('analyse', function() {
-    gulp.src(['./src/angular-logger.js'])
+    gulp.src(['./src/console-logger.js'])
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.jshint.reporter('fail'));
@@ -36,7 +36,7 @@ gulp.task('analyse', function() {
 
 gulp.task('build', ['clean', 'analyse', 'browserify'], function() {
     return gulp.src(['debug/**/*.js'])
-        .pipe($.concat("angular-logger.js"))
+        .pipe($.concat("console-logger.js"))
         .pipe($.size('test'))
         .pipe(gulp.dest('dist'));
 });
@@ -44,25 +44,15 @@ gulp.task('build', ['clean', 'analyse', 'browserify'], function() {
 gulp.task('dist', ['build'], function() {
     return gulp.src(['debug/**/*.js'])
         .pipe($.uglify())
-        .pipe($.concat("angular-logger.min.js"))
+        .pipe($.concat("console-logger.min.js"))
         .pipe($.size())
         .pipe(gulp.dest('dist'));
 });
 
 var testAndGather = lazypipe()
-    .pipe($.coverage.instrument, { pattern: ['dist/angular-logger.js'], debugDirectory: 'debug' })
+    .pipe($.coverage.instrument, { pattern: ['dist/console-logger.js'], debugDirectory: 'debug' })
     .pipe($.jasmine, { includeStackTrace: true })
     .pipe($.coverage.gather);
-
-// gulp.task('test-phantom', ['build'], function() {
-//   return gulp.src(['bower_components/angular/angular.js', 'bower_components/angular-mocks/angular-mocks.js', 'spec/**/*spec.js', 'dist/angular-logger.js'])
-//     .pipe($.coverage.instrument({ pattern: ['dist/angular-logger.js'], debugDirectory: 'debug' }))
-//     .pipe($.jasmineBrowser.specRunner({console: true}))
-//     .pipe($.jasmineBrowser.headless())
-//     .pipe($.coverage.gather())
-//     .pipe($.coverage.format(['html']))
-//     .pipe(gulp.dest('reports/coverage'));
-// });
 
 gulp.task('test', ['build'], function() {
     gulp.src(['spec/**/*spec.js'])
@@ -75,7 +65,7 @@ gulp.task('travis', ['build'], function() {
     gulp.src('spec/**/*spec.js')
         .pipe(testAndGather())
         .pipe($.coverage.format(['lcov']))
-        .pipe($.coveralls());
+        //.pipe($.coveralls());
 });
 
 gulp.task('report', ['clean', 'test'], function() {
