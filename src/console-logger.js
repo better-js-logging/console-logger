@@ -1,59 +1,78 @@
-/* global require */
+/* global require, module, exports */
 var LoggingEnhancer = require('../bower_components/better-logging-base/dist/logging-enhancer.min').LoggingEnhancer;
 
-(function(logEnhancer, sprintf, moment) {
+(function(sprintf, moment) {
     'use strict';
 
-    var datetimePattern = 'LLL'; // default datetime stamp pattern, overwrite in config phase
-    var datetimeLocale = window.navigator.userLanguage || window.navigator.language || 'en';
-    var prefixPattern = '%s::[%s]> '; // default prefix pattern, overwrite in config phase
-
-    var init = false;
-
-    console.getLogger = function(context) {
-        var logger = {
-            trace: logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.TRACE, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
-            debug: logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.DEBUG, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
-            log: logEnhancer.enhanceLogging(bind(console.log), logEnhancer.LEVEL.INFO, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
-            info: logEnhancer.enhanceLogging(bind(console.info), logEnhancer.LEVEL.INFO, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
-            warn: logEnhancer.enhanceLogging(bind(console.warn), logEnhancer.LEVEL.WARN, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern),
-            error: logEnhancer.enhanceLogging(bind(console.error), logEnhancer.LEVEL.ERROR, context, logEnhancer, datetimePattern, datetimeLocale, prefixPattern)
+	var ConsoleLogger = function(sprintf, moment) {
+        var self = this;
+        
+        var logEnhancer = new LoggingEnhancer(sprintf, moment);
+        
+        this.logLevels = logEnhancer.logLevels;
+        this.LEVEL = logEnhancer.LEVEL;
+        
+        this.datetimePattern = 'LLL'; // default datetime stamp pattern, overwrite in config phase
+        this.datetimeLocale = window.navigator.userLanguage || window.navigator.language || 'en';
+        this.prefixPattern = '%s::[%s]> '; // default prefix pattern, overwrite in config phase
+	    
+        // keep originals
+        var logDebug = console.debug;
+        var logLog = console.log;
+        var logInfo = console.info;
+        var logWarn = console.warn;
+        var logError = console.error;
+	        
+	    this.enhanceLogging = function(console) {
+            // override global logging functions to add at least a timestamp
+            console.trace = logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.TRACE, 'global', self, self.datetimePattern, self.datetimeLocale, self.prefixPattern);
+            console.debug = logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.DEBUG, 'global', self, self.datetimePattern, self.datetimeLocale, self.prefixPattern);
+            console.log = logEnhancer.enhanceLogging(bind(console.log), logEnhancer.LEVEL.INFO, 'global', self, self.datetimePattern, self.datetimeLocale, self.prefixPattern);
+            console.info = logEnhancer.enhanceLogging(bind(console.info), logEnhancer.LEVEL.INFO, 'global', self, self.datetimePattern, self.datetimeLocale, self.prefixPattern);
+            console.warn = logEnhancer.enhanceLogging(bind(console.warn), logEnhancer.LEVEL.WARN, 'global', self, self.datetimePattern, self.datetimeLocale, self.prefixPattern);
+            console.error = logEnhancer.enhanceLogging(bind(console.error), logEnhancer.LEVEL.ERROR, 'global', self, self.datetimePattern, self.datetimeLocale, self.prefixPattern);
+	        
+            console.getLogger = function(context) {
+                var logger = {
+                    trace: logEnhancer.enhanceLogging(bind(logDebug), logEnhancer.LEVEL.TRACE, context, self, self.datetimePattern, self.datetimeLocale, self.prefixPattern),
+                    debug: logEnhancer.enhanceLogging(bind(logDebug), logEnhancer.LEVEL.DEBUG, context, self, self.datetimePattern, self.datetimeLocale, self.prefixPattern),
+                    log: logEnhancer.enhanceLogging(bind(logLog), logEnhancer.LEVEL.INFO, context, self, self.datetimePattern, self.datetimeLocale, self.prefixPattern),
+                    info: logEnhancer.enhanceLogging(bind(logInfo), logEnhancer.LEVEL.INFO, context, self, self.datetimePattern, self.datetimeLocale, self.prefixPattern),
+                    warn: logEnhancer.enhanceLogging(bind(logWarn), logEnhancer.LEVEL.WARN, context, self, self.datetimePattern, self.datetimeLocale, self.prefixPattern),
+                    error: logEnhancer.enhanceLogging(bind(logError), logEnhancer.LEVEL.ERROR, context, self, self.datetimePattern, self.datetimeLocale, self.prefixPattern)
+                };
+                return logger;
+            };
         };
-
-        // init has to come afterwards, else the console logging functions would have been replaced already and we'd get double timestamps
-        if (!init) {
-            doInit();
-        }
-
-        return logger;
-    };
-
-    function doInit() {
+        
+        // check optional dependencies
         if (!sprintf) {
             console.warn('[console-logger] sprintf.js not found: https://github.com/alexei/sprintf.js, using fixed layout pattern "%s::[%s]> "');
         }
         if (!moment) {
             console.warn('[console-logger] moment.js not found: http://momentjs.com, using non-localized simple Date format');
         }
-
-        // override global logging functions to add at least a timestamp
-        console.trace = logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.TRACE, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
-        console.debug = logEnhancer.enhanceLogging(bind(console.debug), logEnhancer.LEVEL.DEBUG, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
-        console.log = logEnhancer.enhanceLogging(bind(console.log), logEnhancer.LEVEL.INFO, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
-        console.info = logEnhancer.enhanceLogging(bind(console.info), logEnhancer.LEVEL.INFO, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
-        console.warn = logEnhancer.enhanceLogging(bind(console.warn), logEnhancer.LEVEL.WARN, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
-        console.error = logEnhancer.enhanceLogging(bind(console.error), logEnhancer.LEVEL.ERROR, 'global', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
-
-        init = true;
-
-        var logger = logEnhancer.enhanceLogging(bind(console.info), logEnhancer.LEVEL.INFO, 'console-logger', logEnhancer, datetimePattern, datetimeLocale, prefixPattern);
+    	
+        var logger = logEnhancer.enhanceLogging(bind(logInfo), logEnhancer.LEVEL.INFO, 'console-logger', this, this.datetimePattern, this.datetimeLocale, this.prefixPattern);
         logger('logging enhancer initiated');
-    }
-
+    };
+        
+    // manage dependency exports
+	if (typeof module !== 'undefined') {
+		module.exports.ConsoleLogger = ConsoleLogger;
+	} else if (typeof exports !== 'undefined') {
+		exports.ConsoleLogger = ConsoleLogger;
+	} else if (typeof window === 'undefined') {
+		throw new Error('unable to expose ConsoleLogger: no module, exports object and no global window detected');
+	}
+	
+	if (typeof window !== 'undefined') {
+		window.ConsoleLogger = new ConsoleLogger(sprintf, moment);
+	}
+    
     function bind(func) {
         return function() {
             func.apply(console, arguments);
         };
     }
-
-}(new LoggingEnhancer(window.sprintf, window.moment), window.sprintf, window.moment));
+}());
