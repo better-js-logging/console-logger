@@ -78,7 +78,7 @@ var LoggingEnhancer = require('../bower_components/better-logging-base/dist/logg
     }
 
     if (typeof window !== 'undefined') {
-        window.ConsoleLogger = new ConsoleLogger(sprintf, moment);
+        window.consoleLogger = new ConsoleLogger(sprintf, moment);
     }
 
     function bind(func) {
