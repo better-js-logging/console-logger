@@ -13,7 +13,9 @@
     
   },
   "devDependencies": {
-    "better-logging-base": "1.0.0"
+    "better-logging-base": "1.0.0",
+    "momentjs": "*",
+    "sprintf": "*"
   },
   "keywords": [
     "console",
