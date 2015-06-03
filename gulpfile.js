@@ -50,7 +50,7 @@ gulp.task('dist', ['build'], function() {
 });
 
 var testAndGather = lazypipe()
-    .pipe($.coverage.instrument, { pattern: ['dist/console-logger.js'], debugDirectory: 'debug' })
+    .pipe($.coverage.instrument, { pattern: ['src/console-logger.js'], debugDirectory: 'debug' })
     .pipe($.jasmine, { includeStackTrace: true })
     .pipe($.coverage.gather);
 

@@ -1,47 +1,63 @@
-/* global describe, beforeEach, expect, it, fail*/
+/* global describe, beforeEach, expect, it, fail */
 
-var gutil = require('gulp-util');
-
-var moment = require('../bower_components/momentjs/moment.js');
-var sprintf = require('../bower_components/sprintf/dist/sprintf.min.js').sprintf;
 var ConsoleLogger = require('../src/console-logger.js').ConsoleLogger;
 
 describe('console-logger', function() {
 
-    var logger = null;
+    var enh, moment, sprintf;
 
     beforeEach(function resetCounters() {
-        logger = new ConsoleLogger(sprintf, moment);
+        moment = require('../bower_components/momentjs/moment.js');
+        sprintf = require('../bower_components/sprintf/dist/sprintf.min.js').sprintf;
+        enh = new ConsoleLogger(sprintf, moment);
     });
     
-    it("should enhance the console with current configuration", function() {
-        logger.datetimePattern = 'YYYY';
+    it("should enhance the console globally with current configuration", function() {
+        enh.datetimePattern = 'YYYY';
         expectGlobalLog('debug', ['Hello World!'], [moment().year() + '::[global]> ', 'Hello World!']);
-        logger.prefixPattern = ':%2$s:';
+        enh.prefixPattern = ':%2$s:';
         expectGlobalLog('debug', ['Hello World!'], [':global:', 'Hello World!']);
         expectGlobalLog('debug', ['Hello World!', 5, { 'this': 'a test'}], [':global:', 'Hello World!', 5, { 'this': 'a test'}]);
         expectGlobalLog('debug', ['Hello %s! %s', 'World', 'yeah!', 5], [':global:', 'Hello World! yeah!', 5]);
     });
     
-    function expectGlobalLog(func, input, output) {
-        var c = fakeConsole(func);
-        logger.enhanceLogging(c);
-        expect(c[func].apply(null, input)).toEqual(output);
-    }
-    
     it("should provide contextual loggers", function() {
         var enhancedConsole = fakeConsole('warn');
-        logger.enhanceLogging(enhancedConsole);
+        enh.enhanceLogging(enhancedConsole);
         
-        logger.prefixPattern = ':%2$s:';
-        var localA = enhancedConsole.getLogger('A');
+        enh.prefixPattern = ':%2$s:';
+        var loggerA = enhancedConsole.getLogger('A');
         
-        logger.prefixPattern = '>%2$s<';
-        var localB = enhancedConsole.getLogger('B');
+        enh.prefixPattern = '>%2$s<';
+        var loggerB = enhancedConsole.getLogger('B');
         
-        expect(localA.warn('Test [%s]', 'A')).toEqual([':A:', 'Test [A]']);
-        expect(localB.warn('Test [%s]', 'B')).toEqual(['>B<', 'Test [B]']);
+        expect(loggerA.warn('Test [%s]', 'A')).toEqual([':A:', 'Test [A]']);
+        expect(loggerB.warn('Test [%s]', 'B')).toEqual(['>B<', 'Test [B]']);
     });
+    
+    it("should work without sprintf and moment", function() {
+        enh = new ConsoleLogger(undefined, undefined);
+        var enhancedConsole = fakeConsole('warn');
+        enh.enhanceLogging(enhancedConsole);
+        enh.prefixPattern = '%s:%s:';
+        var logger = enhancedConsole.getLogger('dummy');
+        
+		var dateStr = formatLegacyDatestr();
+		
+        expect(logger.warn('Hello World! %s', 10)).toEqual([dateStr + '::[dummy]> ', 'Hello World! %s', 10]);
+        
+        function formatLegacyDatestr() {
+    		var d = new Date();
+    		var timeStr = new Date().toTimeString().match(/^([0-9]{2}:[0-9]{2}:[0-9]{2})/)[0];
+    		return d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear() + ' ' + timeStr;
+        }
+    });
+    
+    function expectGlobalLog(func, input, output) {
+        var c = fakeConsole(func);
+        enh.enhanceLogging(c);
+        expect(c[func].apply(null, input)).toEqual(output);
+    }
     
     function fakeConsole(func) {
         var c = {

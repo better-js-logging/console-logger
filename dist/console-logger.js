@@ -21,7 +21,7 @@ var LoggingEnhancer = require('../bower_components/better-logging-base/dist/logg
 
         this.prefixPattern = '%s::[%s]> '; // default prefix pattern, overwrite in config phase
 
-        // keep originals
+        // keep originals for global logging (else context loggers have double output)
         var logDebug, logLog, logInfo, logWarn, logError;
 
         this.enhanceLogging = function(console) {
