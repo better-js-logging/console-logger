@@ -65,7 +65,7 @@ gulp.task('travis', ['build'], function() {
     gulp.src('spec/**/*spec.js')
         .pipe(testAndGather())
         .pipe($.coverage.format(['lcov']))
-        //.pipe($.coveralls());
+        .pipe($.coveralls());
 });
 
 gulp.task('report', ['clean', 'test'], function() {
