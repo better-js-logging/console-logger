@@ -60,11 +60,10 @@ console-logger has optional dependencies on _[momentjs](https://github.com/momen
 <a name='bower'/>
 #### Bower
 
-`bower install console-logger`
+```javascript
+bower install console-logger
 
-Optionally (but recommended):
-
-```
+// optionally (but recommended):
 bower install sprintf
 bower install moment
 ```
