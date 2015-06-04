@@ -2,7 +2,7 @@
 /* global require, module, exports */
 var LoggingEnhancer = require('../bower_components/better-logging-base/dist/logging-enhancer.min').LoggingEnhancer;
 
-(function(sprintf, moment) {
+(function() {
     'use strict';
 
     var ConsoleLogger = function(sprintf, moment) {
@@ -78,7 +78,7 @@ var LoggingEnhancer = require('../bower_components/better-logging-base/dist/logg
     }
 
     if (typeof window !== 'undefined') {
-        window.consoleLogger = new ConsoleLogger(sprintf, moment);
+        window.consoleLogger = new ConsoleLogger(window.sprintf, window.moment);
     }
 
     function bind(func) {
