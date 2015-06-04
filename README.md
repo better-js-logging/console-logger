@@ -60,7 +60,7 @@ console-logger has optional dependencies on _[momentjs](https://github.com/momen
 <a name='bower'/>
 #### Bower
 
-Will be implemented under [issue #1](https://github.com/better-js-logging/console-logger/issues/1)
+`bower install console-logger`
 
 <a name='manually'/>
 #### Manually
