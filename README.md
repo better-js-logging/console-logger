@@ -25,13 +25,9 @@ console.getLogger('main.subB').info('Hello %s!', 'brave new world', { 'extra': [
 
 ###[WORKING DEMO](https://jsfiddle.net/plantface/gmg8bgv2/)
 
-* Enhances the standard console's logging functions so that you can define **separate contexts** to log for, where the output will be prepended with the context's name and a datetime stamp.
-* Further enhances the logging functions so that you can **apply patterns** eliminatinging the need of manually concatenating your strings
-* Introduces **log levels**, where you can manage logging output per context or even a group of contexts
-* Works as a **complete drop-in** replacement for your current console logging statements
-
 ---
 
+- [About](#about)
 - [Installing](#installing)
 		- [Bower](#bower)
 		- [Manually](#manually)
@@ -41,6 +37,18 @@ console.getLogger('main.subB').info('Hello %s!', 'brave new world', { 'extra': [
 		- [Datetime stamp patterns](#datetime-stamp-patterns)
 		- [Logging patterns](#logging-patterns)
 - [Managing logging priority](#managing-logging-priority)
+
+---
+
+<a name='about'/>
+## About
+
+This library enhances the console logging capabilities. It works with any console object by modifying the arguments going into the original functions. As such it is able to 'decorate' the browser `console`, but also console shims and polyfills such as [Firebug Lite](https://getfirebug.com/firebuglite) or log4javascript in page console.
+
+* Enhances the standard console's logging functions so that you can define **separate contexts** to log for, where the output will be prepended with the context's name and a datetime stamp.
+* Further enhances the logging functions so that you can **apply patterns** eliminatinging the need of manually concatenating your strings
+* Introduces **log levels**, where you can manage logging output per context or even a group of contexts
+* Works as a **complete drop-in** replacement for your current console logging statements
 
 ---
 
