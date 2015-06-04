@@ -3,24 +3,27 @@
 #console-logger
 
 ```javascript
+// old style
+console.info('Hello Legacy %s!', 'world', { 'extra': ['pass-through params'] }); // Hello Legacy %s! world >Object { "extra": "pass-through params" }
+
+// new style
 consoleLogger.prefixPattern = '%s::[%s]>';
-consoleLogger.datetimePattern = 'dddd h:mm:ss a';
-
-console.info('Hello %s!', 'World', { 'extra': ['pass-through params'] }); 
-// 17-5-2015 11:53:51::[global]> Hello World! Object { "extra": "pass-through params"}
-
+consoleLogger.datetimePattern = 'LLL';
 consoleLogger.logLevels = {
-	'*': consoleLogger.LEVEL.OFF,
-	'main': consoleLogger.LEVEL.WARN,
-	'main.subB': consoleLogger.LEVEL.TRACE
+    '*': consoleLogger.LEVEL.INFO,
+    'main': consoleLogger.LEVEL.WARN,
+    'main.subB': consoleLogger.LEVEL.TRACE
 };
 
-console.getLogger('banana').info('Hello World!'); // ignored, logging turned off for '*'
-console.getLogger('main.subA').info('Hello World!'); // ignored, doesn't pass logging threshold of 'main'
-console.getLogger('main.subB').trace('Hello World!'); // 17-5-2015 11:52:52::[main.subB]> Hello World!
-console.getLogger('main.subB').info('Hello %s!', 'World', { 'extra': ['pass-through params'] }); 
-// 17-5-2015 11:53:51::[main.subB]> Hello World! Object { "extra": "pass-through params"}
+console.info('Hello %s!', 'World'); // 17-5-2015 11:53:51::[global]> Hello World!
+
+console.getLogger('banana').debug('Hello brave new world!'); // ignored, logging set to INFO for '*'
+console.getLogger('main.subA').info('Hello brave new world!'); // ignored, doesn't pass logging threshold of 'main'
+console.getLogger('main.subB').info('Hello %s!', 'brave new world', { 'extra': ['pass-through params'] });
+// 17-5-2015 11:53:51::[main.subB]> Hello World! >Object { "extra": "pass-through params" }
 ```
+
+[live demo](https://jsfiddle.net/plantface/gmg8bgv2/)
 
 ---
 
