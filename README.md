@@ -78,9 +78,7 @@ Include _console-logger.js_, _[momentjs](https://github.com/moment/moment)_ and 
 
 After installing, console-logger should have registered a global `consoleLogger` on the _Window_ object. 
 
-> If available, it will be exported as constructor on module.exports or exports. However, outside of unit testing this in nodejs itself, this has not been tested to work properly. Register an issue if you run into trouble.
-
-   [working demo](TODO)
+> If available, it will be exported as constructor on _module.exports_ or _exports_. However, outside of unit testing this in nodejs itself, this has not been tested to work properly. Register an issue if you run into trouble.
 
 <a name='applying-patterns'/>
 ## Applying Patterns
@@ -165,8 +163,6 @@ logger.warn("Or combine all!: %s, %j", JSON.stringify(obj), obj, obj);
  ```
 
  * For all options, see [sprintf.js](https://github.com/alexei/sprintf.js)
-
-[working demo](TODO)
 
 <a name='managing-logging-priority'/>
 ## Managing logging priority
