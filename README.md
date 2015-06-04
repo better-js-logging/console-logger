@@ -4,7 +4,8 @@
 
 ```javascript
 // old style
-console.info('Hello Legacy %s!', 'world', { 'extra': ['pass-through params'] }); // Hello Legacy %s! world >Object { "extra": "pass-through params" }
+console.info('Hello Legacy %s!', 'world', { 'extra': ['pass-through params'] }); 
+// Hello Legacy %s! world >Object { "extra": "pass-through params" }
 
 // new style
 consoleLogger.prefixPattern = '%s::[%s]>';
