@@ -23,7 +23,7 @@ console.getLogger('main.subB').info('Hello %s!', 'brave new world', { 'extra': [
 // June 4, 2015 7:44 AM::[main.subB]> Hello World! >Object { "extra": "pass-through params" }
 ```
 
- * [live demo](https://jsfiddle.net/plantface/gmg8bgv2/)
+#[WORKING DEMO](https://jsfiddle.net/plantface/gmg8bgv2/)
 
 ---
 
