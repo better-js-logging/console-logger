@@ -23,9 +23,7 @@ console.getLogger('main.subB').info('Hello %s!', 'brave new world', { 'extra': [
 // June 4, 2015 7:44 AM::[main.subB]> Hello World! >Object { "extra": "pass-through params" }
 ```
 
-#[WORKING DEMO](https://jsfiddle.net/plantface/gmg8bgv2/)
-
----
+###[WORKING DEMO](https://jsfiddle.net/plantface/gmg8bgv2/)
 
 * Enhances the standard console's logging functions so that you can define **separate contexts** to log for, where the output will be prepended with the context's name and a datetime stamp.
 * Further enhances the logging functions so that you can **apply patterns** eliminatinging the need of manually concatenating your strings
