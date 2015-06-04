@@ -8,19 +8,19 @@ console.info('Hello Legacy %s!', 'world', { 'extra': ['pass-through params'] });
 
 // enhance logging
 consoleLogger.prefixPattern = '%s::[%s]>';
-consoleLogger.datetimePattern = 'LLL';
+consoleLogger.datetimePattern = 'LLL'; // moment's localization pattern
 consoleLogger.logLevels = {
     '*': consoleLogger.LEVEL.INFO,
     'main': consoleLogger.LEVEL.WARN,
     'main.subB': consoleLogger.LEVEL.TRACE
 };
 
-console.info('Hello %s!', 'World'); // 17-5-2015 11:53:51::[global]> Hello World!
+console.info('Hello %s!', 'World'); // June 4, 2015 7:43 AM::[global]> Hello World!
 
 console.getLogger('banana').debug('Hello brave new world!'); // ignored, logging set to INFO for '*'
 console.getLogger('main.subA').info('Hello brave new world!'); // ignored, doesn't pass logging threshold of 'main'
 console.getLogger('main.subB').info('Hello %s!', 'brave new world', { 'extra': ['pass-through params'] });
-// 17-5-2015 11:53:51::[main.subB]> Hello World! >Object { "extra": "pass-through params" }
+// June 4, 2015 7:44 AM::[main.subB]> Hello World! >Object { "extra": "pass-through params" }
 ```
 
 [live demo](https://jsfiddle.net/plantface/gmg8bgv2/)
