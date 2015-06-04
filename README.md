@@ -10,15 +10,15 @@ console.info('Hello %s!', 'World', { 'extra': ['pass-through params'] });
 // 17-5-2015 11:53:51::[global]> Hello World! Object { "extra": "pass-through params"}
 
 consoleLogger.logLevels = {
-	'*': logEnhancerProvider.LEVEL.OFF,
-	'main': logEnhancerProvider.LEVEL.WARN,
-	'main.subB': logEnhancerProvider.LEVEL.TRACE
+	'*': consoleLogger.LEVEL.OFF,
+	'main': consoleLogger.LEVEL.WARN,
+	'main.subB': consoleLogger.LEVEL.TRACE
 };
 
-consoleLogger.getLogger('banana').info('Hello World!'); // ignored, logging turned off for '*'
-consoleLogger.getLogger('main.subA').info('Hello World!'); // ignored, doesn't pass logging threshold of 'main'
-consoleLogger.getLogger('main.subB').trace('Hello World!'); // 17-5-2015 11:52:52::[main.subB]> Hello World!
-consoleLogger.getLogger('main.subB').info('Hello %s!', 'World', { 'extra': ['pass-through params'] }); 
+console.getLogger('banana').info('Hello World!'); // ignored, logging turned off for '*'
+console.getLogger('main.subA').info('Hello World!'); // ignored, doesn't pass logging threshold of 'main'
+console.getLogger('main.subB').trace('Hello World!'); // 17-5-2015 11:52:52::[main.subB]> Hello World!
+console.getLogger('main.subB').info('Hello %s!', 'World', { 'extra': ['pass-through params'] }); 
 // 17-5-2015 11:53:51::[main.subB]> Hello World! Object { "extra": "pass-through params"}
 ```
 
