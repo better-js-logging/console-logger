@@ -23,7 +23,7 @@ console.getLogger('main.subB').info('Hello %s!', 'brave new world', { 'extra': [
 // June 4, 2015 7:44 AM::[main.subB]> Hello World! >Object { "extra": "pass-through params" }
 ```
 
-[live demo](https://jsfiddle.net/plantface/gmg8bgv2/)
+ * [live demo](https://jsfiddle.net/plantface/gmg8bgv2/)
 
 ---
 
@@ -162,6 +162,8 @@ logger.warn("Or combine all!: %s, %j", JSON.stringify(obj), obj, obj);
 Using logging levels, we can manage output on several levels. Contexts can be named using dot '.' notation, where the names before dots are intepreted as groups or packages.
 
 For example for `'a.b'` and `a.c` we can define a general log level for `a` and have a different log level for only 'a.c'.
+
+![visual result of angular-logger](enhanced-logging.png)
 
 The following logging functions (left side) are available:
 
