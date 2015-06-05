@@ -93,7 +93,7 @@ However, you can change this as follows:
 
 ```javascript
 consoleLogger.prefixPattern = '%s - %s: ';
-consoleLogger.getLogger('app').info('Hello World');
+console.getLogger('app').info('Hello World');
 // was:    Sunday 12:55:07 am::[app]>Hello World
 // became: Sunday 12:55:07 am - app: Hello World
 ```
@@ -118,7 +118,7 @@ If you have included _moment.js_ in your webapp, you can start using datetime st
 
 ```javascript
 consoleLogger.datetimePattern = 'dddd';
-consoleLogger.getLogger()('app').info('Hello World');
+console.getLogger()('app').info('Hello World');
 // was:    Sunday 12:55:07 am::[app]>Hello World
 // became: Sunday::[app]>Hello World
 ```
@@ -140,7 +140,7 @@ logger.error ("Error uploading document [" + filename + "], Error: '" + err.mess
 
 Modern style with console-logger enhanced `console.error`:
  ```javascript
-var logger = consoleLogger.getLogger("myapp.file-upload");
+var logger = console.getLogger("myapp.file-upload");
 logger.error("Error uploading document [%s], Error: '%s'. Try again later.", filename, err.message)
 // Sunday 12:13:06 pm::[myapp.file-upload]> Error uploading document [contract.pdf], Error: 'Service currently down'. Try again later.
  ```
@@ -149,7 +149,7 @@ logger.error("Error uploading document [%s], Error: '%s'. Try again later.", fil
 
 You can even **combine pattern input and normal input**:
  ```javascript
-var logger = consoleLogger.getLogger('test');
+var logger = console.getLogger('test');
 logger.warn("This %s pattern %j", "is", "{ 'in': 'put' }", "but this is not!", ['this', 'is', ['handled'], 'by the browser'], { 'including': 'syntax highlighting', 'and': 'console interaction' });
 // 17-5-2015 00:16:08::[test]>  This is pattern "{ 'in': 'put' }" but this is not! ["this", "is handled", "by the browser"] Object {including: "syntax highlighting", and: "console interaction"}
  ```
