@@ -50,8 +50,6 @@ This library enhances the console logging capabilities. It works with any consol
 * Introduces **log levels**, where you can manage logging output per context or even a group of contexts
 * Works as a **complete drop-in** replacement for your current console logging statements
 
----
-
 <a name='installing'/>
 ## Installing
 
